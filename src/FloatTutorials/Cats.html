@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Cats Galore</title>
+</head>
+
+	<style>
+
+	body {
+		background-color: rgb(251, 251, 252);
+		font-family: 'Lora', serif;
+	}
+
+	.thumbnail {
+		float: left;
+		width: 120px;
+		/*border: 1px solid #999;*/
+		margin: 0px 50px 50px 0px;
+		margin-left: 65px;
+		padding: 50px;
+	}
+
+	.thumbnail { transition: all .1s linear; }
+	/*.thumbnail:hover { transform: scale(1.2); }		*/
+
+	.clearboth{
+		clear: both;
+	}
+
+	#wrapper {
+		display: inline-block;
+	}
+
+	#header {
+		display: inline-block;
+		margin-left: 14%;
+	}
+
+	#window{
+		position: fixed;
+		top: 10%;
+		height: 75%;
+		width: 50%;
+		/*margin-left:35%;*/
+	}
+
+	#window::backdrop{
+		top: 50%;
+		background: black;
+	}
+
+	dialog::backdrop{
+		background:red;
+	}
+
+	</style>
+	
+	<link href='http://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
+	<script src="https://fb.me/react-0.13.2.js"></script>
+	<script src="https://fb.me/JSXTransformer-0.13.2.js"></script>
+	<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+	<link rel="stylesheet" type="text/css" href="./css/CatStyles.css">
+<body>
+
+
+	<div id="Main"></div>
+
+	<script type="text/jsx">
+
+		var Main = React.createClass({
+
+			getInitialState: function(){
+				return {
+					//disable original data array to not display fetch / anything
+					data: [
+						// {
+						// 	link: 'http://thecatapi.com/api/images/get?format=src',
+						// 	text: 'Cat 1'
+						// }
+					],
+					imgLink: null,
+					changeImageClass: null
+				}
+			},
+
+			updateState: function(data){
+				var newData = [];
+				var i=1;
+
+				data.match(/<\s*img.*?>/g).forEach(function(item){
+					newData.push({
+						link: $(item).attr('src'),
+						// text: $(item).attr('src')
+						text: 'Cat '+ i++
+					});
+				});
+
+				this.setState({
+					data: newData,
+				});
+
+				console.log('newData:', newData);
+
+			},
+
+			clickedThumbnail: function(param, e){
+				console.log('clickedThumbnail: ');
+				this.state.imgLink = param;
+				console.log('param: ', param);
+
+				this.setState({
+					imgLink: param,
+					changeImageClass: true
+				});
+
+			},
+
+			fetchCatData: function(){
+
+				$.ajax({
+					url: 'http://localhost:8081/scrape',
+					success: function(result){
+						// console.log('result: ', result);
+						this.updateState(result );
+					}.bind(this)
+				})
+
+			},
+
+			componentDidMount: function(){
+				this.fetchCatData();
+			},
+
+			fetchNewData: function(){
+				this.fetchCatData();
+			},
+
+			closeThumbnail: function(e){
+				console.log('closeThumbnail: ', e);
+				// e.stopPropagation();
+				// e.preventDefault();
+
+				this.setState({
+					imgLink:null,
+					changeImageClass:false
+				})
+			},
+
+			render: function(){
+
+				console.log('this.highLevel.props: ', this.props);
+
+				return(
+					<div>
+						<div id="header" >
+								<h1>Cats.. </h1>
+						</div>
+						<Modal link={this.state.imgLink} closeThumbnail={this.closeThumbnail} />
+						<Button fetchNewData={this.fetchNewData} />
+
+						<div>
+							<CatList {...this} data={this.state.data} imgageClass={this.state.changeImageClass}   />
+						</div>
+					</div>
+				)
+			}
+		});
+
+		var Modal = React.createClass({
+
+			showModal: function(){
+				var dialog = document.getElementById('window');
+				console.log('this.props.link: ', this.props.link);
+
+				if (this.props.link){	
+					dialog.show();
+ 				} else if (dialog && dialog.open === true){
+ 					dialog.close();
+ 				}
+			},
+
+			render: function(){
+				this.showModal();
+
+				console.log('window.props: ', this.props);
+
+				return(
+					<dialog id="window">
+						<h3>Meow</h3>
+						<img src={this.props.link} width="400" height="400" ></img>
+						<a href={this.props.link}>{this.props.link}</a>
+						<p><button id="exit" onClick={this.props.closeThumbnail} >Exit</button></p>						
+					</dialog>
+				)
+			}
+
+		});
+
+		var Button = React.createClass({
+
+			render: function(){
+
+				console.log('Button props: ', this.props);
+				var style = {
+					float: 'right',
+					'margin-right': '19%',
+					'margin-top': '3%'
+				}				
+				return(
+					<button type="button" style={style} onClick={this.props.fetchNewData} >Moar</button>
+				)
+			}
+
+		});
+
+		var CatList = React.createClass({
+
+			getInitialState: function(){
+
+				return {
+					testObj: 'testObj'
+				}
+			},
+
+			zoomHandler: function(){
+				// alert('zoomHandler');
+			},
+
+			render: function(){
+				// console.log('this.testObj: ', this.state.testObj );
+				console.log('this.CatList.props: ', this.props);
+
+				var self = this;
+				var catNodes = this.props.data.map(function(cat){
+					return(
+						<div className={(this.props.imageClass===true)  ? 'thumbnail-no-zoom' : 'thumbnail'  }  
+							onClick={this.zoomHandler} >
+							<Cat text={cat.text} link={cat.link} {...this.props}>
+								{cat.text}
+							</Cat>
+						</div>
+					)
+
+				}.bind(this));
+
+				return(	
+					<div>
+						{catNodes}
+					</div>
+				)
+
+			}
+
+		});
+
+
+		var Cat = React.createClass({
+
+			getInitialState: function(){
+				return {
+					display: ''
+				}
+			},
+
+			clickPicture: function(){
+				// console.log('clicked: ', this.props);
+				this.props.clickedThumbnail(this.props.link);
+			},
+
+			hideImage: function(){
+				this.setState({
+					display: 'hidden'
+				});
+			},
+
+			componentDidMount: function(){
+				console.log('image has been loaded: ');
+				this.setState({
+					display: 'visible'
+				})
+			},
+
+			componentWillMount: function(){
+				this.setState({
+					display: 'hidden'
+				})
+			},
+
+			render: function(){
+
+				var style = {
+					visibility: this.state.display
+				}
+
+				// console.log('this.props: ', this.props);
+
+				return(
+					<img style={style} src={this.props.link} width="250" height="250" onClick={this.clickPicture} >
+					{this.props.children}
+						<br></br>
+					</img>
+				)
+
+			}
+
+
+		})
+
+		React.render(
+			<Main />, document.getElementById('Main')
+		);
+
+	</script>
+
+
+<!-- <div class="thumbnail">
+	<img src="http://thecatapi.com/api/images/get?format=src" alt="" width="200" height="200"><br>Cat1 
+</div>
+
+<div class="thumbnail">
+	<img src="http://thecatapi.com/api/images/get?format=src" alt="" width="200" height="200"><br>Cat2 
+</div>
+
+<div class="thumbnail">
+	<img src="http://thecatapi.com/api/images/get?format=src" alt="" width="200" height="200"><br>Cat3 
+</div>
+
+<br class="clearboth">
+
+<div class="thumbnail">
+	<img src="http://thecatapi.com/api/images/get?format=src" alt="" width="200" height="200"><br>Cat4 
+</div>
+
+<div class="thumbnail">
+	<img src="http://thecatapi.com/api/images/get?format=src" alt="" width="200" height="200"><br>Cat5 
+</div>
+
+<div class="thumbnail">
+	<img src="http://thecatapi.com/api/images/get?format=src" alt="" width="200" height="200"><br>Cat6
+</div>
+ -->
+</body>
+</html>

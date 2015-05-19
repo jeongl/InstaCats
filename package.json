@@ -1,0 +1,57 @@
+{
+  "name": "gulp-babel",
+  "version": "5.1.0",
+  "description": "Turn ES6 code into vanilla ES5 with no runtime required",
+  "license": "MIT",
+  "repository": "babel/gulp-babel",
+  "author": {
+    "name": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "http://sindresorhus.com"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "gulpplugin",
+    "rewriting",
+    "transformation",
+    "syntax",
+    "codegen",
+    "desugaring",
+    "javascript",
+    "ecmascript",
+    "language",
+    "es5",
+    "es6",
+    "ES.next",
+    "harmony",
+    "compiler",
+    "transpiler",
+    "6to5"
+  ],
+  "dependencies": {
+    "babel-core": "^5.0.0",
+    "express": "^4.12.3",
+    "gulp-util": "^3.0.0",
+    "object-assign": "^2.0.0",
+    "replace-ext": "0.0.1",
+    "request": "^2.55.0",
+    "through2": "^0.6.1",
+    "vinyl-sourcemaps-apply": "^0.1.1"
+  },
+  "devDependencies": {
+    "gulp-connect": "^2.2.0",
+    "gulp-livereload": "^3.8.0",
+    "gulp-open": "^0.3.2",
+    "gulp-sourcemaps": "^1.1.1",
+    "gulp-watch": "^4.2.4",
+    "mocha": "*"
+  }
+}
