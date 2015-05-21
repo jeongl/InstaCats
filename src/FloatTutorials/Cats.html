@@ -53,6 +53,10 @@
 		background:red;
 	}
 
+	#wrapper{
+		display: -webkit-inline-box;
+	}
+
 	</style>
 	
 	<link href='http://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
@@ -99,14 +103,10 @@
 					data: newData,
 				});
 
-				console.log('newData:', newData);
-
 			},
 
 			clickedThumbnail: function(param, e){
-				console.log('clickedThumbnail: ');
 				this.state.imgLink = param;
-				console.log('param: ', param);
 
 				this.setState({
 					imgLink: param,
@@ -120,7 +120,6 @@
 				$.ajax({
 					url: 'http://localhost:8081/scrape',
 					success: function(result){
-						// console.log('result: ', result);
 						this.updateState(result );
 					}.bind(this)
 				})
@@ -136,9 +135,6 @@
 			},
 
 			closeThumbnail: function(e){
-				console.log('closeThumbnail: ', e);
-				// e.stopPropagation();
-				// e.preventDefault();
 
 				this.setState({
 					imgLink:null,
@@ -147,11 +143,8 @@
 			},
 
 			render: function(){
-
-				console.log('this.highLevel.props: ', this.props);
-
 				return(
-					<div>
+					<div id="wrapper" >
 						<div id="header" >
 								<h1>Cats.. </h1>
 						</div>
@@ -170,7 +163,6 @@
 
 			showModal: function(){
 				var dialog = document.getElementById('window');
-				console.log('this.props.link: ', this.props.link);
 
 				if (this.props.link){	
 					dialog.show();
@@ -181,8 +173,6 @@
 
 			render: function(){
 				this.showModal();
-
-				console.log('window.props: ', this.props);
 
 				return(
 					<dialog id="window">
@@ -199,15 +189,13 @@
 		var Button = React.createClass({
 
 			render: function(){
-
-				console.log('Button props: ', this.props);
 				var style = {
 					float: 'right',
 					'margin-right': '19%',
 					'margin-top': '3%'
 				}				
 				return(
-					<button type="button" style={style} onClick={this.props.fetchNewData} >Moar</button>
+					<button type="button" style={style} onClick={this.props.fetchNewData} >Change Cats</button>
 				)
 			}
 
@@ -227,8 +215,6 @@
 			},
 
 			render: function(){
-				// console.log('this.testObj: ', this.state.testObj );
-				console.log('this.CatList.props: ', this.props);
 
 				var self = this;
 				var catNodes = this.props.data.map(function(cat){
@@ -263,7 +249,6 @@
 			},
 
 			clickPicture: function(){
-				// console.log('clicked: ', this.props);
 				this.props.clickedThumbnail(this.props.link);
 			},
 
@@ -274,7 +259,6 @@
 			},
 
 			componentDidMount: function(){
-				console.log('image has been loaded: ');
 				this.setState({
 					display: 'visible'
 				})
@@ -291,8 +275,6 @@
 				var style = {
 					visibility: this.state.display
 				}
-
-				// console.log('this.props: ', this.props);
 
 				return(
 					<img style={style} src={this.props.link} width="250" height="250" onClick={this.clickPicture} >
