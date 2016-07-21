@@ -23,8 +23,6 @@
 	.thumbnail { transition: all .1s linear; }
 	/*.thumbnail:hover { transform: scale(1.2); }		*/
 
-	.tiles { padding-top: 6em; margin-left: -8em; }
-
 	.clearboth{
 		clear: both;
 	}
@@ -34,7 +32,8 @@
 	}
 
 	#header {
-		display: inline-block;0
+		display: inline-block;
+		padding-left: 7em;
 	}
 
 	#window{
@@ -145,15 +144,17 @@
 
 			render: function(){
 				return(
-					<div id="wrapper" >
+					<div>
 						<div id="header" >
-								<h1>Cats.. </h1>
+							<h1>Cats.. </h1>
 						</div>
-						<Modal link={this.state.imgLink} closeThumbnail={this.closeThumbnail} />
 						<Button fetchNewData={this.fetchNewData} />
+						<div id="wrapper" >
+							<Modal link={this.state.imgLink} closeThumbnail={this.closeThumbnail} />
 
-						<div className="tiles">
-							<CatList {...this} data={this.state.data} imgageClass={this.state.changeImageClass}   />
+							<div className="tiles">
+								<CatList {...this} data={this.state.data} imgageClass={this.state.changeImageClass}   />
+							</div>
 						</div>
 					</div>
 				)
@@ -188,10 +189,12 @@
 		});
 
 		var Button = React.createClass({
-
 			render: function(){
+				var style = {
+					marginLeft: '2em'
+				}
 				return(
-					<button type="button" onClick={this.props.fetchNewData} >Change Cats</button>
+					<button type="button" style={style} onClick={this.props.fetchNewData} >Change Cats</button>
 				)
 			}
 
