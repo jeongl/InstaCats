@@ -23,6 +23,8 @@
 	.thumbnail { transition: all .1s linear; }
 	/*.thumbnail:hover { transform: scale(1.2); }		*/
 
+	.tiles { padding-top: 6em; margin-left: -8em; }
+
 	.clearboth{
 		clear: both;
 	}
@@ -32,8 +34,7 @@
 	}
 
 	#header {
-		display: inline-block;
-		margin-left: 14%;
+		display: inline-block;0
 	}
 
 	#window{
@@ -151,7 +152,7 @@
 						<Modal link={this.state.imgLink} closeThumbnail={this.closeThumbnail} />
 						<Button fetchNewData={this.fetchNewData} />
 
-						<div>
+						<div className="tiles">
 							<CatList {...this} data={this.state.data} imgageClass={this.state.changeImageClass}   />
 						</div>
 					</div>
@@ -189,13 +190,8 @@
 		var Button = React.createClass({
 
 			render: function(){
-				var style = {
-					float: 'right',
-					'margin-right': '19%',
-					'margin-top': '3%'
-				}				
 				return(
-					<button type="button" style={style} onClick={this.props.fetchNewData} >Change Cats</button>
+					<button type="button" onClick={this.props.fetchNewData} >Change Cats</button>
 				)
 			}
 
