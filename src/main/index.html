@@ -118,7 +118,7 @@
 			fetchCatData: function(){
 
 				$.ajax({
-					url: 'http://localhost:8081/scrape',
+					url: '/scrape',
 					success: function(result){
 						this.updateState(result );
 					}.bind(this)
